@@ -1,0 +1,9 @@
+# Core dependencies
+numpy
+opencv-python
+flask
+
+# CPU Inference
+onnxruntime
+
+# Note: Hailo bindings (hailo_platform) must be installed manually using the wheel provided in setup/installers/
