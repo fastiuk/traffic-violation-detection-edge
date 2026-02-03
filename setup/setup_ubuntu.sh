@@ -9,7 +9,8 @@ sudo apt update && sudo apt upgrade -y
 
 # 2. Install dependencies
 echo "Installing dependencies..."
-sudo apt install -y python3-venv python3-pip ffmpeg wget git libopencv-dev
+# Removed libopencv-dev to avoid conflicts with system packages
+sudo apt install -y python3-venv python3-pip ffmpeg wget git
 
 # 3. Install Hailo Runtime & Driver
 echo "Installing Hailo debs..."
@@ -29,7 +30,8 @@ if [ ! -f "$HAILORT_DEB" ] || [ ! -f "$DRIVER_DEB" ] || [ ! -f "$PYTHON_WHL" ]; 
 fi
 
 # Force install if dependencies missing, then fix
-sudo dpkg -i "$HAILORT_DEB" "$DRIVER_DEB" || sudo apt-get install -f -y
+# Pipe "Y" to accept DKMS prompt automatically
+printf "Y\n" | sudo dpkg -i "$HAILORT_DEB" "$DRIVER_DEB" || sudo apt-get install -f -y
 
 # 4. Create Virtual Environment
 echo "Creating venv..."
@@ -42,8 +44,9 @@ pip install --upgrade pip
 # Install the provided Hailo wheel
 pip install "$PYTHON_WHL"
 
-# Install other requirements
-pip install numpy opencv-python onnxruntime flask
+# Install other requirements with PINNED VERSIONS to avoid Numpy 2.0 conflicts
+# HailoRT 4.23.0 requires numpy<2
+pip install "numpy==1.26.4" "opencv-python==4.11.0.86" flask onnxruntime
 
 # 6. Download Models
 echo "Downloading models..."

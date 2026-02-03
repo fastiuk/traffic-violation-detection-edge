@@ -70,7 +70,11 @@ Significant technical hurdles were overcome to establish a stable testing enviro
 *   **Issue:** The Hailo driver requires a 4KB memory page size. The Raspberry Pi 5 kernel defaults to 16KB pages for performance.
 *   **Solution:** Modified `/boot/firmware/config.txt` to force the use of the `kernel8.img` kernel variant, ensuring 4KB page size compatibility.
 
-### 4.4 Python API & Buffer Management
+### 4.4 Numpy 2.0 Incompatibility
+*   **Issue:** The HailoRT 4.23.0 Python bindings use C-API calls that are incompatible with the new Numpy 2.0+ ABI. This resulted in an `Input buffer size 0` error during inference because the memory layout of the numpy array could not be correctly interpreted by the runtime.
+*   **Solution:** Explicitly pinned `numpy==1.26.4` and `opencv-python==4.11.0.86` in the environment setup to ensure ABI compatibility.
+
+### 4.5 Python API & Buffer Management
 *   **Issue:** The high-level Python API threw `HailoRTInvalidOperationException` and "buffer as view" errors when handling models with NMS post-processing layers.
 *   **Solution:** Implemented manual output buffer allocation using `create_bindings(output_buffers=...)` with explicitly typed `numpy` arrays to correctly map the dynamic NMS output.
 
@@ -104,27 +108,15 @@ For production applications, further performance gains (closer to the 30 FPS har
 ## 7. Appendices
 
 ### 7.1 Setup Script (Reference)
-The following script was used to provision the environment:
-
-```bash
-#!/bin/bash
-# setup_ubuntu.sh
-set -e
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y python3-venv python3-pip ffmpeg wget git libopencv-dev
-# Manual install of matching deb versions required
-sudo dpkg -i hailort_4.23.0_arm64.deb hailort-pcie-driver_4.23.0_all.deb
-sudo apt-get install -f -y
-python3 -m venv ~/hailo_env
-source ~/hailo_env/bin/activate
-pip install numpy opencv-python onnxruntime flask
-pip install hailort-4.23.0-cp312-cp312-linux_aarch64.whl
-# Enable 4k pages
-echo "kernel=kernel8.img" | sudo tee -a /boot/firmware/config.txt
-```
+The project includes an automated setup script `setup/setup_ubuntu.sh` which handles dependencies, drivers, and configuration. It explicitly checks for the presence of the required Hailo binaries.
 
 ### 7.2 Reproduction Steps
-1.  Install Ubuntu 24.04 on Raspberry Pi 5.
-2.  Install HailoRT 4.23.0 & Driver 4.23.0.
-3.  Install Python dependencies and Hailo wheel.
-4.  Run `hailo_inference_web.py` (provided in project artifacts).
+1.  **Clone Repository:** Clone this repository to your Raspberry Pi 5 running Ubuntu 24.04.
+2.  **Download Binaries:** Download the following files from the Hailo Developer Zone (requires account):
+    *   `hailort_4.23.0_arm64.deb`
+    *   `hailort-pcie-driver_4.23.0_all.deb`
+    *   `hailort-4.23.0-cp312-cp312-linux_aarch64.whl`
+3.  **Place Files:** Move these three files into the `setup/installers/` directory within the cloned repository.
+4.  **Run Setup:** Execute `bash setup/setup_ubuntu.sh`. This will install dependencies, drivers, the python environment, and apply necessary kernel configurations (4K page size).
+5.  **Reboot:** Reboot the system as prompted.
+6.  **Run Benchmark:** Execute the scripts located in `performance-benchmark/src/`.
