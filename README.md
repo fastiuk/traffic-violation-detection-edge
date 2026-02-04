@@ -14,8 +14,10 @@ The project investigates the feasibility and efficiency of deploying advanced co
 ## Getting Started
 
 ### 1. Hardware & OS Requirements
-*   **Device:** Raspberry Pi 5 (8GB recommended)
-*   **Accelerator:** Hailo-8L M.2 module + Raspberry Pi M.2 HAT+
+*   **Device:** Raspberry Pi 5 (8GB recommended)  
+    ![Raspberry Pi 5](performance-benchmark/results/rpi5.png)
+*   **Accelerator:** Hailo-8L M.2 module + Raspberry Pi M.2 HAT+ (Hailo AI Kit)  
+    ![Hailo AI Kit](performance-benchmark/results/hailo_ai_kit.webp)
 *   **OS:** **Ubuntu 24.04 LTS (Noble Numbat)** 64-bit for Raspberry Pi.
     *   *Note:* Raspberry Pi OS is not fully supported by this automated setup due to ABI versioning conflicts.
 
