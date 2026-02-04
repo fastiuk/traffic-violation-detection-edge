@@ -73,7 +73,7 @@ Access the stream at `http://<RPI_IP>:5001`.
     *   `setup_ubuntu.sh`: Automates the installation of drivers, dependencies, and python environments on Ubuntu 24.04.
     *   `installers/`: Place downloaded proprietary binaries here.
 
-*   **`results/`**  
+*   **`performance-benchmark/results/`**  
     Experimental data, screenshots, and logs captured during testing.
 
 ## Key Findings (Preliminary)
