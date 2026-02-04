@@ -12,7 +12,7 @@ except ImportError:
 
 app = Flask(__name__)
 
-hef_path = "hailo_models/yolov5s_h8l.hef"
+hef_path = "/opt/hailo_models/yolov5s_h8l.hef"
 target = None
 infer_model = None
 configured_infer_model = None
