@@ -36,17 +36,17 @@ The project investigates the feasibility and efficiency of deploying advanced co
     *   `hailort-4.23.0-cp312-cp312-linux_aarch64.whl`  
         **MD5:** `a66552e308c1123616cbdb4fd69e5485`
 
-3.  **Run the Setup Script:**
-    This script automates dependency installation, driver setup, and environment configuration (including pinning Numpy < 2.0).
+3.  **Run Setup Part 1 (System):**
+    Updates the OS and enables PCIe. **The system will reboot automatically.**
     ```bash
-    chmod +x setup/setup_ubuntu.sh
-    ./setup/setup_ubuntu.sh
+    ./setup/setup_part1_system.sh
     ```
 
-4.  **Reboot:**
-    Restart the device to apply kernel configuration changes (PCIe enablement).
+4.  **Run Setup Part 2 (Hailo):**
+    After the reboot, log in and run:
     ```bash
-    sudo reboot
+    cd traffic-violation-detection-edge
+    ./setup/setup_part2_hailo.sh
     ```
 
 ### 3. Running the Benchmark
