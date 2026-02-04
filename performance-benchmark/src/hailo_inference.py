@@ -11,7 +11,7 @@ except ImportError:
     exit(1)
 
 def main():
-    hef_path = "hailo_models/yolov5s_h8l.hef"
+    hef_path = "/opt/hailo_models/yolov5s_h8l.hef"
     
     if not os.path.exists(hef_path):
         print(f"Error: Model file not found at {hef_path}")

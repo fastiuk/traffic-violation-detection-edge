@@ -6,7 +6,7 @@ from flask import Flask, Response, render_template_string
 
 app = Flask(__name__)
 
-model_path = "hailo_models/yolov5s.onnx"
+model_path = "/opt/hailo_models/yolov5s.onnx"
 session = None
 input_name = None
 output_name = None

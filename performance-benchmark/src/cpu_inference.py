@@ -5,7 +5,7 @@ import numpy as np
 import sys
 
 def main():
-    model_path = "hailo_models/yolov5s.onnx"
+    model_path = "/opt/hailo_models/yolov5s.onnx"
     
     # Initialize ONNX Runtime session
     try:
