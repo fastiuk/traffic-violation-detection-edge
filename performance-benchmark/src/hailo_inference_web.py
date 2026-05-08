@@ -31,6 +31,10 @@ def init_hailo():
         target = VDevice(params)
         
         infer_model = target.create_infer_model(hef_path)
+        
+        # Enable hardware latency measurement
+        infer_model.set_latency_measurement(LatencyMeasurementConfig.TOTAL_LATENCY)
+        
         configured_infer_model = infer_model.configure()
         
         # Manually create output buffers
@@ -66,15 +70,12 @@ def generate_frames():
     start_time = time.time()
 
     # Explicit activation
-    print("Activating Hailo model...")
     configured_infer_model.activate()
-    print("Hailo model activated.")
 
     try:
         while True:
             ret, frame = cap.read()
             if not ret:
-                print("Failed to read frame")
                 break
 
             img = cv2.resize(frame, (input_width, input_height))
@@ -83,17 +84,22 @@ def generate_frames():
             
             bindings.input().set_buffer(img)
             
-            t1 = time.time()
+            # Inference
             configured_infer_model.run([bindings], 1000)
-            t2 = time.time()
+            
+            # Get Hardware Latency
+            latency_stats = configured_infer_model.get_latency_stats()
+            hw_latency_ms = latency_stats.avg_latency / 1000.0 if latency_stats.avg_latency else 0
+            pfps = 1000.0 / hw_latency_ms if hw_latency_ms > 0 else 0
             
             frame_count += 1
             elapsed_time = time.time() - start_time
-            fps = frame_count / elapsed_time if elapsed_time > 0 else 0
-            inference_time = (t2 - t1) * 1000
+            real_fps = frame_count / elapsed_time if elapsed_time > 0 else 0
 
-            cv2.putText(frame, f"Hailo FPS: {fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-            cv2.putText(frame, f"Inf Time: {inference_time:.2f} ms", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+            # Draw Metrics
+            cv2.putText(frame, f"Real FPS: {real_fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+            cv2.putText(frame, f"PFPS (HW): {pfps:.2f}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 165, 0), 2)
+            cv2.putText(frame, f"HW Latency: {hw_latency_ms:.2f} ms", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 165, 0), 2)
 
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_bytes = buffer.tobytes()
@@ -104,7 +110,6 @@ def generate_frames():
     except Exception as e:
         print(f"Streaming loop error: {e}")
     finally:
-        print("Deactivating Hailo model...")
         configured_infer_model.deactivate()
         cap.release()
 

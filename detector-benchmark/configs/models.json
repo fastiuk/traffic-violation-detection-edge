@@ -1,0 +1,68 @@
+[
+  {
+    "name": "yolov5m_vehicles",
+    "family": "yolov5",
+    "task": "vehicle_detection",
+    "type": "vehicle_specific",
+    "classes": 1,
+    "input_shape": [1080, 1920],
+    "quantization": "int8",
+    "hailo_target": "hailo8l",
+    "hef_url": "https://hailo-model-zoo.s3.eu-west-2.amazonaws.com/ModelZoo/Compiled/v2.14.0/hailo8l/yolov5m_vehicles.hef"
+  },
+  {
+    "name": "yolov5s",
+    "family": "yolov5",
+    "task": "coco_detection",
+    "type": "generic_coco",
+    "classes": 80,
+    "input_shape": [640, 640],
+    "quantization": "int8",
+    "hailo_target": "hailo8l",
+    "hef_url": "https://hailo-model-zoo.s3.eu-west-2.amazonaws.com/ModelZoo/Compiled/v2.14.0/hailo8l/yolov5s.hef"
+  },
+  {
+    "name": "yolov8s",
+    "family": "yolov8",
+    "task": "coco_detection",
+    "type": "generic_coco",
+    "classes": 80,
+    "input_shape": [640, 640],
+    "quantization": "int8",
+    "hailo_target": "hailo8l",
+    "hef_url": "https://hailo-model-zoo.s3.eu-west-2.amazonaws.com/ModelZoo/Compiled/v2.14.0/hailo8l/yolov8s.hef"
+  },
+  {
+    "name": "yolov8m",
+    "family": "yolov8",
+    "task": "coco_detection",
+    "type": "generic_coco",
+    "classes": 80,
+    "input_shape": [640, 640],
+    "quantization": "int8",
+    "hailo_target": "hailo8l",
+    "hef_url": "https://hailo-model-zoo.s3.eu-west-2.amazonaws.com/ModelZoo/Compiled/v2.14.0/hailo8l/yolov8m.hef"
+  },
+  {
+    "name": "yolov11n",
+    "family": "yolov11",
+    "task": "coco_detection",
+    "type": "generic_coco",
+    "classes": 80,
+    "input_shape": [640, 640],
+    "quantization": "int8",
+    "hailo_target": "hailo8l",
+    "hef_url": "https://hailo-model-zoo.s3.eu-west-2.amazonaws.com/ModelZoo/Compiled/v2.14.0/hailo8l/yolov11n.hef"
+  },
+  {
+    "name": "yolov11s",
+    "family": "yolov11",
+    "task": "coco_detection",
+    "type": "generic_coco",
+    "classes": 80,
+    "input_shape": [640, 640],
+    "quantization": "int8",
+    "hailo_target": "hailo8l",
+    "hef_url": "https://hailo-model-zoo.s3.eu-west-2.amazonaws.com/ModelZoo/Compiled/v2.14.0/hailo8l/yolov11s.hef"
+  }
+]
