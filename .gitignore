@@ -1,2 +1,12 @@
-setup/installers/*.deb
-setup/installers/*.whl
+# Artifacts
+.DS_Store
+__pycache__/
+*.py[cod]
+
+detector-benchmark/logs/
+detector-benchmark/results/
+performance-benchmark/models/
+setup/installers/*
+!setup/installers/.gitkeep
+video-footage-dataset/*
+!video-footage-dataset/.gitkeep
