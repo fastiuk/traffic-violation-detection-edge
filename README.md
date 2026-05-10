@@ -38,13 +38,19 @@ The project investigates the feasibility and efficiency of deploying advanced co
     *   `hailort-4.23.0-cp312-cp312-linux_aarch64.whl`  
         **MD5:** `a66552e308c1123616cbdb4fd69e5485`
 
-3.  **Run Setup Part 1 (System):**
+3.  **Download Benchmark Datasets:**
+    ```bash
+    ./setup/download_coco_val2017.sh
+    ./setup/download_video_footage_dataset.py
+    ```
+
+4.  **Run Setup Part 1 (System):**
     Updates the OS and enables PCIe. **The system will reboot automatically.**
     ```bash
     ./setup/setup_part1_system.sh
     ```
 
-4.  **Run Setup Part 2 (Hailo):**
+5.  **Run Setup Part 2 (Hailo):**
     After the reboot, log in and run:
     ```bash
     cd traffic-violation-detection-edge
@@ -72,7 +78,9 @@ Access the stream at `http://<RPI_IP>:5001`.
 
 *   **`setup/`**  
     Infrastructure as Code (IaC) and setup scripts to provision the edge environment.
-    *   `setup_ubuntu.sh`: Automates the installation of drivers, dependencies, and python environments on Ubuntu 24.04.
+    *   `setup_part1_system.sh` and `setup_part2_hailo.sh`: Ubuntu 24.04 setup path using manually supplied Hailo installers.
+    *   `setup_raspberry_pi_os_hailo.sh`: Raspberry Pi OS/Debian setup path using Raspberry Pi apt packages.
+    *   `download_coco_val2017.sh` and `download_video_footage_dataset.py`: dataset download helpers.
     *   `installers/`: Place downloaded proprietary binaries here.
 
 *   **`performance-benchmark/results/`**  
@@ -99,3 +107,5 @@ Initial benchmarking with YOLOv5s (640x640) demonstrates the critical necessity 
 ## License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+* The video dataset attribution: Free Stock Footage by Vecteezy.com
