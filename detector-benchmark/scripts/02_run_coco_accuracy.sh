@@ -14,12 +14,12 @@ mkdir -p "$RUN_DIR"
 
 IMAGES=$(python3 - <<'PY'
 import json
-print(json.load(open('detector-benchmark/configs/datasets.json'))['coco_val2017']['images'])
+print(json.load(open('configs/datasets.json'))['coco_val2017']['images'])
 PY
 )
 ANN=$(python3 - <<'PY'
 import json
-print(json.load(open('detector-benchmark/configs/datasets.json'))['coco_val2017']['annotations'])
+print(json.load(open('configs/datasets.json'))['coco_val2017']['annotations'])
 PY
 )
 

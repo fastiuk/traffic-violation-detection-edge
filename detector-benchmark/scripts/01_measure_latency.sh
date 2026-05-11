@@ -10,7 +10,7 @@ if [[ $# -lt 2 ]]; then
 fi
 MODEL_NAME=$1
 HEF_PATH=$2
-RUN_DIR=${3:-"$BENCH_DIR/results/runs/$(run_id)_${HAILO_DEVICE}_${MODEL_NAME}"}
+RUN_DIR=${3:-"$REPO_DIR/results/detector-benchmark/runs/$(run_id)_${HAILO_DEVICE}_${MODEL_NAME}"}
 mkdir -p "$RUN_DIR"
 
 if [[ ! -f "$HEF_PATH" ]]; then

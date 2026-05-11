@@ -8,10 +8,11 @@ a=p.parse_args()
 rd=pathlib.Path(a.run_dir); rd.mkdir(parents=True, exist_ok=True)
 models=json.load(open(a.models_config)); model=models[a.model_index]
 device={}
-for line in pathlib.Path(a.device_env).read_text().splitlines():
-    if '=' in line and not line.strip().startswith('#'):
-        k,v=line.split('=',1); device[k]=v
-
+env_file = pathlib.Path(a.device_env)
+if env_file.exists():
+    for line in env_file.read_text().splitlines():
+        if '=' in line and not line.strip().startswith('#'):
+            k,v=line.split('=',1); device[k]=v
 def cmd(c):
     try: return subprocess.check_output(c, shell=True, text=True, stderr=subprocess.STDOUT).strip()
     except Exception as e: return f'ERROR: {e}'

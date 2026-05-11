@@ -4,15 +4,20 @@ set -euo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 BENCH_DIR=$(cd -- "$SCRIPT_DIR/.." && pwd)
 REPO_DIR=$(cd -- "$BENCH_DIR/.." && pwd)
-DEVICE_ENV="$BENCH_DIR/configs/device.env"
+DEVICE_ENV="$REPO_DIR/configs/device.env"
 
 if [[ -f "$DEVICE_ENV" ]]; then
   # shellcheck source=/dev/null
   source "$DEVICE_ENV"
 fi
 
-: "${RPI_HOST:=10.10.10.21}"
-: "${RPI_USER:=pi}"
+if [[ -f "$REPO_DIR/.env" ]]; then
+  # shellcheck source=/dev/null
+  source "$REPO_DIR/.env"
+fi
+
+: "${RPI_HOST:=${HOST_IP:-10.10.10.21}}"
+: "${RPI_USER:=${HOST_USER:-pi}}"
 : "${RPI_PROJECT_DIR:=/home/pi/traffic-violation-detection-edge}"
 : "${RPI_VENV_PY:=/home/pi/hailo-rpi5-examples/venv_hailo_rpi_examples/bin/python}"
 : "${HAILO_DEVICE:=hailo8l}"
@@ -44,7 +49,7 @@ run_id() {
 }
 
 json_get_model_count() {
-  python3 - "$BENCH_DIR/configs/models.json" <<'PY'
+  python3 - "$REPO_DIR/configs/models.json" <<'PY'
 import json, sys
 print(len(json.load(open(sys.argv[1]))))
 PY
@@ -52,7 +57,7 @@ PY
 
 json_get_model() {
   local index=$1 key=$2
-  python3 - "$BENCH_DIR/configs/models.json" "$index" "$key" <<'PY'
+  python3 - "$REPO_DIR/configs/models.json" "$index" "$key" <<'PY'
 import json, sys
 models=json.load(open(sys.argv[1]))
 value=models[int(sys.argv[2])][sys.argv[3]]

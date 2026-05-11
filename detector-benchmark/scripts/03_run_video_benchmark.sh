@@ -14,7 +14,7 @@ mkdir -p "$RUN_DIR/video_overlays"
 
 VIDEO_DIR=$(python3 - <<'PY'
 import json
-print(json.load(open('detector-benchmark/configs/datasets.json'))['traffic_videos']['path'])
+print(json.load(open('configs/datasets.json'))['traffic_videos']['path'])
 PY
 )
 

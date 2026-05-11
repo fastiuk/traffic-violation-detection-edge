@@ -37,7 +37,7 @@ hailortcli scan || true
 printf '\n## Dataset\n'
 python3 - <<'PY'
 import json, pathlib
-cfg=json.load(open('detector-benchmark/configs/datasets.json'))
+cfg=json.load(open('configs/datasets.json'))
 for name,d in cfg.items():
     print(name)
     for k in ('images','annotations','path'):
@@ -47,4 +47,4 @@ for name,d in cfg.items():
 PY
 
 printf '\n## Models config\n'
-python3 -m json.tool detector-benchmark/configs/models.json >/dev/null && echo OK
+python3 -m json.tool configs/models.json >/dev/null && echo OK

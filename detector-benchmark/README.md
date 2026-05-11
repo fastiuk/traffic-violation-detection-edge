@@ -19,6 +19,13 @@ Configured in `configs/device.env`:
 pi@10.10.10.21:/home/pi/traffic-violation-detection-edge
 ```
 
+Before running any commands, set up your local `.env` file containing the connection details for the Raspberry Pi:
+
+```bash
+cp .env.example .env
+# Edit .env to set your HOST_IP, HOST_USER, and HOST_PASSWORD (if applicable)
+```
+
 ## Prepare datasets on the RPi
 
 Use the global setup scripts from the repository root:
@@ -43,37 +50,10 @@ dataset and model-cache excludes below. Otherwise the Pi will delete
 `dataset/` and downloaded HEF/model files, forcing a full re-download.
 Never combine these commands with `--delete-excluded`.
 
-Example with `rclone` over SFTP:
+Example with Make:
 
 ```bash
-rclone sync . rpi5:traffic-violation-detection-edge \
-  --exclude '.git/**' \
-  --exclude '.ai/**' \
-  --exclude '.codex/**' \
-  --exclude '.gemini/**' \
-  --exclude '.claude/**' \
-  --exclude '**/__pycache__/**' \
-  --exclude 'detector-benchmark/results/**' \
-  --exclude 'detector-benchmark/logs/**' \
-  --exclude 'dataset/**' \
-  --exclude 'performance-benchmark/models/**'
-```
-
-Equivalent `rsync`:
-
-```bash
-rsync -avz --delete \
-  --exclude '.git' \
-  --exclude '.ai' \
-  --exclude '.codex' \
-  --exclude '.gemini' \
-  --exclude '.claude' \
-  --exclude '__pycache__' \
-  --exclude 'detector-benchmark/results/' \
-  --exclude 'detector-benchmark/logs/' \
-  --exclude 'dataset/' \
-  --exclude 'performance-benchmark/models/' \
-  . pi@10.10.10.21:~/traffic-violation-detection-edge/
+make sync-files
 ```
 
 ## Run on the RPi
@@ -102,5 +82,5 @@ Results are written on the RPi under:
 Pull them back with:
 
 ```bash
-rsync -avz pi@10.10.10.21:~/traffic-violation-detection-edge/detector-benchmark/results/ detector-benchmark/results/
+make sync-results
 ```

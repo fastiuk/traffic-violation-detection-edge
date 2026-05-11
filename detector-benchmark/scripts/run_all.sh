@@ -5,9 +5,11 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 source "$SCRIPT_DIR/lib.sh"
 
 cd "$RPI_PROJECT_DIR"
-MODELS_DIR="$RPI_PROJECT_DIR/performance-benchmark/models"
-mkdir -p "$MODELS_DIR" "$BENCH_DIR/results/runs" "$BENCH_DIR/logs"
-MASTER="$BENCH_DIR/results/master_detector_results.jsonl"
+MODELS_DIR="$REPO_DIR/models"
+RESULTS_DIR="$REPO_DIR/results/detector-benchmark"
+LOGS_DIR="$REPO_DIR/logs/detector-benchmark"
+mkdir -p "$MODELS_DIR" "$RESULTS_DIR/runs" "$LOGS_DIR"
+MASTER="$RESULTS_DIR/master_detector_results.jsonl"
 : > "$MASTER"
 
 count=$(json_get_model_count)
@@ -19,7 +21,7 @@ fi
 
 for ((i=0; i<count; i++)); do
   NAME=$(json_get_model "$i" name)
-  ENABLED=$(python3 - "$BENCH_DIR/configs/models.json" "$i" <<'PY'
+  ENABLED=$(python3 - "$REPO_DIR/configs/models.json" "$i" <<'PY'
 import json, sys
 model = json.load(open(sys.argv[1]))[int(sys.argv[2])]
 print(str(model.get("enabled", True)).lower())
@@ -46,14 +48,14 @@ print(json.loads('$SHAPE')[1])
 PY
 )
   RUN_ID="$(run_id)_${HAILO_DEVICE}_${NAME}_${HEIGHT}x${WIDTH}"
-  RUN_DIR="$BENCH_DIR/results/runs/$RUN_ID"
+  RUN_DIR="$RESULTS_DIR/runs/$RUN_ID"
   HEF="$MODELS_DIR/${NAME}_${HAILO_DEVICE}.hef"
   mkdir -p "$RUN_DIR"
 
   echo "=== [$((i+1))/$count] $NAME ==="
   python3 "$BENCH_DIR/src/write_run_metadata.py" \
     --run-dir "$RUN_DIR" --run-id "$RUN_ID" --model-index "$i" \
-    --models-config "$BENCH_DIR/configs/models.json" --device-env "$DEVICE_ENV"
+    --models-config "$REPO_DIR/configs/models.json" --device-env "$DEVICE_ENV"
 
   if [[ ! -f "$HEF" ]]; then
     echo "Downloading $NAME"
@@ -88,6 +90,6 @@ PY
   python3 "$BENCH_DIR/src/summarize_run.py" "$RUN_DIR" >> "$MASTER"
 done
 
-python3 "$BENCH_DIR/src/generate_detector_report.py" "$BENCH_DIR/results" \
-  > "$BENCH_DIR/results/detector_comparison.md"
-echo "Done. Report: $BENCH_DIR/results/detector_comparison.md"
+python3 "$BENCH_DIR/src/generate_detector_report.py" "$RESULTS_DIR" \
+  > "$RESULTS_DIR/detector_comparison.md"
+echo "Done. Report: $RESULTS_DIR/detector_comparison.md"
