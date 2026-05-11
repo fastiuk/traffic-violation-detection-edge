@@ -39,8 +39,8 @@ metadata, local AI-agent context, generated results, datasets, model caches, or
 Python bytecode.
 
 If you use delete semantics (`rclone sync` or `rsync --delete`), keep the
-dataset and model-cache excludes below. Otherwise the Pi will delete COCO,
-video footage, and downloaded HEF/model files, forcing a full re-download.
+dataset and model-cache excludes below. Otherwise the Pi will delete
+`dataset/` and downloaded HEF/model files, forcing a full re-download.
 Never combine these commands with `--delete-excluded`.
 
 Example with `rclone` over SFTP:
@@ -55,8 +55,7 @@ rclone sync . rpi5:traffic-violation-detection-edge \
   --exclude '**/__pycache__/**' \
   --exclude 'detector-benchmark/results/**' \
   --exclude 'detector-benchmark/logs/**' \
-  --exclude 'evaluation/**' \
-  --exclude 'video-footage-dataset/**' \
+  --exclude 'dataset/**' \
   --exclude 'performance-benchmark/models/**'
 ```
 
@@ -72,8 +71,7 @@ rsync -avz --delete \
   --exclude '__pycache__' \
   --exclude 'detector-benchmark/results/' \
   --exclude 'detector-benchmark/logs/' \
-  --exclude 'evaluation/' \
-  --exclude 'video-footage-dataset/' \
+  --exclude 'dataset/' \
   --exclude 'performance-benchmark/models/' \
   . pi@10.10.10.21:~/traffic-violation-detection-edge/
 ```
@@ -85,6 +83,14 @@ ssh pi@10.10.10.21
 cd ~/traffic-violation-detection-edge
 ./detector-benchmark/scripts/00_check_environment.sh
 ./detector-benchmark/scripts/run_all.sh
+```
+
+`run_all.sh` measures Hailo hardware latency and COCO accuracy by default.
+The unannotated traffic-video benchmark is kept for qualitative/throughput
+inspection, but is skipped unless explicitly enabled:
+
+```bash
+RUN_VIDEO_BENCHMARK=1 ./detector-benchmark/scripts/run_all.sh
 ```
 
 Results are written on the RPi under:

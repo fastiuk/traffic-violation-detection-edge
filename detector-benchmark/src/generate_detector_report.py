@@ -21,5 +21,5 @@ for r in rows:
     def f(x): return '' if x is None else (f'{x:.4f}' if isinstance(x,float) else str(x))
     print(f"| {r.get('run_id','')} | {model} | {r.get('status','')} | {f(lat.get('hw_latency_ms'))} | {f(lat.get('processing_fps_from_hw_latency'))} | {f(a.get('mAP_50_95'))} | {f(a.get('mAP_50'))} | {f(acc.get('end_to_end_fps'))} | {f(avg)} |")
 print('\n## Notes')
-print('- Video metrics are throughput/detection-count metrics only unless separate ground-truth annotations are added.')
+print('- Video metrics are skipped by default because the traffic videos are unannotated; enable them only for throughput, detection-count trends, or qualitative inspection.')
 print('- `HW FPS` is computed as `1000 / HW latency ms`; it is not full application FPS.')

@@ -13,7 +13,11 @@ from pathlib import Path, PurePosixPath
 BASE_URL = "https://nas.fastiuk.com"
 SHARE_ID = "dzkwUEM3I"
 SHARE_URL = f"{BASE_URL}/sharing/{SHARE_ID}"
-TARGET_DIR = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parents[1] / "video-footage-dataset"
+TARGET_DIR = (
+    Path(sys.argv[1])
+    if len(sys.argv) > 1
+    else Path(__file__).resolve().parents[1] / "dataset" / "traffic-vids"
+)
 
 
 def curl(args, *, text=True):

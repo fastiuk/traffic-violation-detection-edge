@@ -425,8 +425,7 @@ rclone sync . rpi5:traffic-violation-detection-edge \
   --exclude '**/__pycache__/**' \
   --exclude 'detector-benchmark/results/**' \
   --exclude 'detector-benchmark/logs/**' \
-  --exclude 'evaluation/**' \
-  --exclude 'video-footage-dataset/**' \
+  --exclude 'dataset/**' \
   --exclude 'performance-benchmark/models/**'
 ssh pi@10.10.10.21
 cd ~/traffic-violation-detection-edge
@@ -438,7 +437,7 @@ rsync -avz pi@10.10.10.21:~/traffic-violation-detection-edge/detector-benchmark/
 General sync pattern:
 
 ```bash
-rsync -avz --delete --exclude '.git' --exclude '__pycache__' --exclude '.ai' --exclude '.codex' --exclude '.gemini' --exclude '.claude' --exclude 'detector-benchmark/results/' --exclude 'detector-benchmark/logs/' --exclude 'evaluation/' --exclude 'video-footage-dataset/' --exclude 'performance-benchmark/models/' . pi@10.10.10.21:~/traffic-violation-detection-edge/
+rsync -avz --delete --exclude '.git' --exclude '__pycache__' --exclude '.ai' --exclude '.codex' --exclude '.gemini' --exclude '.claude' --exclude 'detector-benchmark/results/' --exclude 'detector-benchmark/logs/' --exclude 'dataset/' --exclude 'performance-benchmark/models/' . pi@10.10.10.21:~/traffic-violation-detection-edge/
 ```
 
 Do not use `--delete-excluded`; datasets and model caches must survive code syncs.

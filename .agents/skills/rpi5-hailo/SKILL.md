@@ -31,8 +31,7 @@ rclone sync . rpi5:traffic-violation-detection-edge \
   --exclude '**/__pycache__/**' \
   --exclude 'detector-benchmark/results/**' \
   --exclude 'detector-benchmark/logs/**' \
-  --exclude 'evaluation/**' \
-  --exclude 'video-footage-dataset/**' \
+  --exclude 'dataset/**' \
   --exclude 'performance-benchmark/models/**'
 ```
 

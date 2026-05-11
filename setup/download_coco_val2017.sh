@@ -5,15 +5,15 @@ set -euo pipefail
 # the Hailo accuracy benchmark scripts.
 #
 # Default target matches the benchmark code paths:
-#   ~/traffic-violation-detection-edge/evaluation/val2017
-#   ~/traffic-violation-detection-edge/evaluation/annotations/instances_val2017.json
+#   ~/traffic-violation-detection-edge/dataset/coco/val2017
+#   ~/traffic-violation-detection-edge/dataset/coco/annotations/instances_val2017.json
 #
 # Usage:
-#   ./setup/download_coco_val2017.sh [evaluation_dir]
+#   ./setup/download_coco_val2017.sh [coco_dir]
 
-EVAL_DIR="${1:-$HOME/traffic-violation-detection-edge/evaluation}"
-mkdir -p "$EVAL_DIR"
-cd "$EVAL_DIR"
+COCO_DIR="${1:-$HOME/traffic-violation-detection-edge/dataset/coco}"
+mkdir -p "$COCO_DIR"
+cd "$COCO_DIR"
 
 download_extract_zip() {
   local url="$1"
@@ -36,13 +36,13 @@ download_extract_zip() {
 download_extract_zip \
   "http://images.cocodataset.org/annotations/annotations_trainval2017.zip" \
   "annotations_trainval2017.zip" \
-  "$EVAL_DIR/annotations/instances_val2017.json"
+  "$COCO_DIR/annotations/instances_val2017.json"
 
 download_extract_zip \
   "http://images.cocodataset.org/zips/val2017.zip" \
   "val2017.zip" \
-  "$EVAL_DIR/val2017"
+  "$COCO_DIR/val2017"
 
-echo "COCO Val2017 ready under: $EVAL_DIR"
-echo "Images:      $EVAL_DIR/val2017"
-echo "Annotations: $EVAL_DIR/annotations/instances_val2017.json"
+echo "COCO Val2017 ready under: $COCO_DIR"
+echo "Images:      $COCO_DIR/val2017"
+echo "Annotations: $COCO_DIR/annotations/instances_val2017.json"

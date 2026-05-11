@@ -5,8 +5,7 @@ __pycache__/
 
 detector-benchmark/logs/
 detector-benchmark/results/
+dataset/
 performance-benchmark/models/
 setup/installers/*
 !setup/installers/.gitkeep
-video-footage-dataset/*
-!video-footage-dataset/.gitkeep

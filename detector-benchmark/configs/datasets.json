@@ -1,12 +1,12 @@
 {
   "coco_val2017": {
-    "images": "/home/pi/traffic-violation-detection-edge/evaluation/val2017",
-    "annotations": "/home/pi/traffic-violation-detection-edge/evaluation/annotations/instances_val2017.json",
+    "images": "/home/pi/traffic-violation-detection-edge/dataset/coco/val2017",
+    "annotations": "/home/pi/traffic-violation-detection-edge/dataset/coco/annotations/instances_val2017.json",
     "vehicle_category_ids": [2, 3, 4, 6, 8],
     "note": "COCO Val2017 full 5000 images. Use for mAP. Vehicle categories: bicycle, car, motorcycle, bus, truck."
   },
   "traffic_videos": {
-    "path": "/home/pi/traffic-violation-detection-edge/video-footage-dataset",
+    "path": "/home/pi/traffic-violation-detection-edge/dataset/traffic-vids",
     "note": "Unannotated videos. Use for throughput/detection counts/qualitative overlays only, not accuracy."
   }
 }

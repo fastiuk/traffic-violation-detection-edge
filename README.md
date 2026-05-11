@@ -43,6 +43,8 @@ The project investigates the feasibility and efficiency of deploying advanced co
     ./setup/download_coco_val2017.sh
     ./setup/download_video_footage_dataset.py
     ```
+    COCO is stored under `dataset/coco`; traffic videos are stored under
+    `dataset/traffic-vids`.
 
 4.  **Run Setup Part 1 (System):**
     Updates the OS and enables PCIe. **The system will reboot automatically.**

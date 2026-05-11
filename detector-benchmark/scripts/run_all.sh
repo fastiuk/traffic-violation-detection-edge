@@ -12,12 +12,23 @@ MASTER="$BENCH_DIR/results/master_detector_results.jsonl"
 
 count=$(json_get_model_count)
 echo "Starting detector benchmark: $count models"
+echo "Video benchmark: ${RUN_VIDEO_BENCHMARK:-0} (set RUN_VIDEO_BENCHMARK=1 to enable)"
 if [[ -n "${BENCH_MODEL_FILTER:-}" ]]; then
   echo "Model filter: $BENCH_MODEL_FILTER"
 fi
 
 for ((i=0; i<count; i++)); do
   NAME=$(json_get_model "$i" name)
+  ENABLED=$(python3 - "$BENCH_DIR/configs/models.json" "$i" <<'PY'
+import json, sys
+model = json.load(open(sys.argv[1]))[int(sys.argv[2])]
+print(str(model.get("enabled", True)).lower())
+PY
+)
+  if [[ "$ENABLED" == "false" ]]; then
+    echo "=== [$((i+1))/$count] $NAME: disabled ==="
+    continue
+  fi
   if [[ -n "${BENCH_MODEL_FILTER:-}" && ",$BENCH_MODEL_FILTER," != *",$NAME,"* ]]; then
     continue
   fi
@@ -58,8 +69,14 @@ PY
   latency_ec=$?
   "$SCRIPT_DIR/02_run_coco_accuracy.sh" "$NAME" "$HEF" "$CLASSES" "$HEIGHT" "$WIDTH" "$RUN_DIR" > "$RUN_DIR/step_coco.log" 2>&1
   coco_ec=$?
-  "$SCRIPT_DIR/03_run_video_benchmark.sh" "$NAME" "$HEF" "$CLASSES" "$HEIGHT" "$WIDTH" "$RUN_DIR" > "$RUN_DIR/step_video.log" 2>&1
-  video_ec=$?
+  if [[ "${RUN_VIDEO_BENCHMARK:-0}" == "1" ]]; then
+    "$SCRIPT_DIR/03_run_video_benchmark.sh" "$NAME" "$HEF" "$CLASSES" "$HEIGHT" "$WIDTH" "$RUN_DIR" > "$RUN_DIR/step_video.log" 2>&1
+    video_ec=$?
+  else
+    echo "Skipped. Set RUN_VIDEO_BENCHMARK=1 to run unannotated traffic-video throughput." > "$RUN_DIR/step_video.log"
+    printf '{"status":"skipped","reason":"unannotated videos are not part of the default quantitative detector benchmark"}\n' > "$RUN_DIR/metrics_video.json"
+    video_ec=0
+  fi
   set -e
 
   printf '{"latency":%s,"coco":%s,"video":%s}\n' "$latency_ec" "$coco_ec" "$video_ec" > "$RUN_DIR/exit_codes.json"
