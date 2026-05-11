@@ -416,36 +416,21 @@ Local-first workflow:
 Detector benchmark commands:
 
 ```bash
-rclone sync . rpi5:traffic-violation-detection-edge \
-  --exclude '.git/**' \
-  --exclude '.ai/**' \
-  --exclude '.codex/**' \
-  --exclude '.gemini/**' \
-  --exclude '.claude/**' \
-  --exclude '**/__pycache__/**' \
-  --exclude 'detector-benchmark/results/**' \
-  --exclude 'detector-benchmark/logs/**' \
-  --exclude 'dataset/**' \
-  --exclude 'performance-benchmark/models/**'
-ssh pi@10.10.10.21
-cd ~/traffic-violation-detection-edge
-./detector-benchmark/scripts/00_check_environment.sh
-./detector-benchmark/scripts/run_all.sh
-rsync -avz pi@10.10.10.21:~/traffic-violation-detection-edge/detector-benchmark/results/ detector-benchmark/results/
+make sync-files
+make run-detector-benchmark
+make sync-results
 ```
 
 General sync pattern:
 
 ```bash
-rsync -avz --delete --exclude '.git' --exclude '__pycache__' --exclude '.ai' --exclude '.codex' --exclude '.gemini' --exclude '.claude' --exclude 'detector-benchmark/results/' --exclude 'detector-benchmark/logs/' --exclude 'dataset/' --exclude 'performance-benchmark/models/' . pi@10.10.10.21:~/traffic-violation-detection-edge/
+make sync-files
 ```
-
-Do not use `--delete-excluded`; datasets and model caches must survive code syncs.
 
 Use Hailo hardware latency tooling when available:
 
 ```bash
-ssh pi@10.10.10.21 "hailortcli run --measure-latency /path/to/model.hef"
+make measure-latency MODEL_PATH=/path/to/model.hef
 ```
 
 ## Repository Conventions

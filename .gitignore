@@ -2,10 +2,11 @@
 .DS_Store
 __pycache__/
 *.py[cod]
+.env
 
-detector-benchmark/logs/
-detector-benchmark/results/
+logs/
+results/
 dataset/
-performance-benchmark/models/
+models/
 setup/installers/*
 !setup/installers/.gitkeep
